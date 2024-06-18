@@ -2,7 +2,7 @@
 	"schemaVersion": 1,
 	"id": "blackbarconcealer",
 	"version": "${version}",
-	"name": "BlackBarConcealer",
+	"name": "Black Bar Concealer",
 	"description": "Conceals black bars of alex skins used on the steve model.",
 	"authors": [
 		"Gerrygames"
