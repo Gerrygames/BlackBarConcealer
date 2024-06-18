@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "de.gerrygames.blackbarconcealer.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "MixinHttpTexture"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "client": [
+    "MixinPlayerSkin",
+    "MixinTextureManager"
+  ]
+}

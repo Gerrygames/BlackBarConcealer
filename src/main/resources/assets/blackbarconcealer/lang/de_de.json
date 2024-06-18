@@ -1,0 +1,9 @@
+{
+  "text.autoconfig.blackbarconcealer.title": "Black Bar Concealer",
+  "text.autoconfig.blackbarconcealer.option.enabled": "Aktiviert",
+  "text.autoconfig.blackbarconcealer.option.fillPixels": "Generiere Fehlende Pixel",
+  "text.autoconfig.blackbarconcealer.option.preferWideModel": "Prefer Wide Model",
+  "key.blackbarconcealer.toggle": "BBC wechseln",
+  "text.blackbarconcealer.toggled.on": "Black Bar Concealer aktiviert!",
+  "text.blackbarconcealer.toggled.off": "Black Bar Concealer deaktivier!"
+}
