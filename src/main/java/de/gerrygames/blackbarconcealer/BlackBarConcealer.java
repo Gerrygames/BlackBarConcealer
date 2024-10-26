@@ -28,7 +28,7 @@ public class BlackBarConcealer implements ModInitializer {
 					httpTexture.blackBarConcealer$reload();
 				}
 			});
-			return InteractionResult.SUCCESS_NO_ITEM_USED;
+			return InteractionResult.SUCCESS;
 		});
 
 		KeyMapping toggleKeyMapping = new KeyMapping("key.blackbarconcealer.toggle", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_B, KeyMapping.CATEGORY_MISC);

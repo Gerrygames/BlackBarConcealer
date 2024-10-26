@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.6-SNAPSHOT'
+	id 'fabric-loom' version '1.8-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -33,8 +33,8 @@ dependencies {
 	modApi "com.terraformersmc:modmenu:11.0.0-rc.4"
 
 	// Lombok
-	compileOnly 'org.projectlombok:lombok:1.18.30'
-	annotationProcessor "org.projectlombok:lombok:1.18.30"
+	compileOnly 'org.projectlombok:lombok:1.18.34'
+	annotationProcessor "org.projectlombok:lombok:1.18.34"
 }
 
 processResources {

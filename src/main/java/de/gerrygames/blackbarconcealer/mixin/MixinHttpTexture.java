@@ -48,8 +48,8 @@ public abstract class MixinHttpTexture implements IMixinHttpTexture {
 			int yo = armDiff.getY();
 			for (int x = armDiff.getWidth() - 1; x >= 0; x--) {
 				for (int y = armDiff.getHeight() - 1; y >= 0; y--) {
-					int rgba = skin.getPixelRGBA(xo + x, yo + y);
-					if ((rgba & 0xFFFFFF) != 0 && (rgba & 0xFF000000) != 0) {
+					int rgba = skin.getPixel(xo + x, yo + y);
+					if ((rgba & 0xFFFFFF) != 0 && (rgba >>> 24) != 0) {
 						hasThiccArms = true;
 						return;
 					}
