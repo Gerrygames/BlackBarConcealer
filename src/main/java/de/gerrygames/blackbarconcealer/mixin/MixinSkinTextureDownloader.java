@@ -27,17 +27,17 @@ public abstract class MixinSkinTextureDownloader {
 
 		ResourceLocation thiccResourceLocation = ResourceLocation.fromNamespaceAndPath(resourceLocation.getNamespace(), "thicc/" + resourceLocation.getPath());
 		if (hasThiccArms(nativeImage)) {
-			minecraft.getTextureManager().register(thiccResourceLocation, new DynamicTexture(nativeImage));
+			minecraft.getTextureManager().register(thiccResourceLocation, new DynamicTexture(thiccResourceLocation::toString, nativeImage));
 			cir.setReturnValue(thiccResourceLocation);
 		} else {
 			ResourceLocation thinResourceLocation = ResourceLocation.fromNamespaceAndPath(resourceLocation.getNamespace(), "thin/" + resourceLocation.getPath());
-			minecraft.getTextureManager().register(thinResourceLocation, new DynamicTexture(nativeImage));
+			minecraft.getTextureManager().register(thinResourceLocation, new DynamicTexture(thinResourceLocation::toString, nativeImage));
 			cir.setReturnValue(thinResourceLocation);
 
 			NativeImage converted = new NativeImage(nativeImage.format(), nativeImage.getWidth(), nativeImage.getHeight(), true);
 			converted.copyFrom(nativeImage);
 			convertAlexToSteve(converted);
-			minecraft.getTextureManager().register(thiccResourceLocation, new DynamicTexture(converted));
+			minecraft.getTextureManager().register(thiccResourceLocation, new DynamicTexture(thiccResourceLocation::toString, converted));
 		}
 	}
 
