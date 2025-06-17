@@ -22,7 +22,7 @@ public abstract class MixinSkinTextureDownloader {
 	};
 
 	@Inject(method = "method_65864", at = @At("HEAD"), cancellable = true)
-	private static void registerTextureInManager(Minecraft minecraft, ResourceLocation resourceLocation, NativeImage nativeImage, CallbackInfoReturnable<ResourceLocation> cir) {
+	private static void registerTextureInManager(ResourceLocation resourceLocation, NativeImage nativeImage, Minecraft minecraft, CallbackInfoReturnable<ResourceLocation> cir) {
 		if (!resourceLocation.getPath().startsWith("skins")) return;
 
 		ResourceLocation thiccResourceLocation = ResourceLocation.fromNamespaceAndPath(resourceLocation.getNamespace(), "thicc/" + resourceLocation.getPath());
