@@ -1,12 +1,15 @@
 package de.gerrygames.blackbarconcealer.mixin;
 
 import com.mojang.blaze3d.platform.NativeImage;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.SkinTextureDownloader;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.core.ClientAsset;
 import net.minecraft.resources.ResourceLocation;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -21,23 +24,27 @@ public abstract class MixinSkinTextureDownloader {
 			new Rect2i(46, 52, 2, 12),
 	};
 
-	@Inject(method = "method_65864", at = @At("HEAD"), cancellable = true)
-	private static void registerTextureInManager(ResourceLocation resourceLocation, NativeImage nativeImage, Minecraft minecraft, CallbackInfoReturnable<ResourceLocation> cir) {
-		if (!resourceLocation.getPath().startsWith("skins")) return;
+	@Shadow @Final private TextureManager textureManager;
 
-		ResourceLocation thiccResourceLocation = ResourceLocation.fromNamespaceAndPath(resourceLocation.getNamespace(), "thicc/" + resourceLocation.getPath());
+	@Inject(method = "method_65864", at = @At("HEAD"), cancellable = true)
+	private void registerTextureInManager(ClientAsset.Texture texture, NativeImage nativeImage, CallbackInfoReturnable<ClientAsset.Texture> cir) {
+		ResourceLocation texturePath = texture.texturePath();
+		if (!texturePath.getPath().startsWith("skins")) return;
+
+		String url = ((ClientAsset.DownloadedTexture) texture).url();
+		ResourceLocation thiccResourceLocation = texturePath.withPath(path -> "thicc/" + path);
 		if (hasThiccArms(nativeImage)) {
-			minecraft.getTextureManager().register(thiccResourceLocation, new DynamicTexture(thiccResourceLocation::toString, nativeImage));
-			cir.setReturnValue(thiccResourceLocation);
+			textureManager.register(thiccResourceLocation, new DynamicTexture(thiccResourceLocation::toString, nativeImage));
+			cir.setReturnValue(new ClientAsset.DownloadedTexture(thiccResourceLocation, url));
 		} else {
-			ResourceLocation thinResourceLocation = ResourceLocation.fromNamespaceAndPath(resourceLocation.getNamespace(), "thin/" + resourceLocation.getPath());
-			minecraft.getTextureManager().register(thinResourceLocation, new DynamicTexture(thinResourceLocation::toString, nativeImage));
-			cir.setReturnValue(thinResourceLocation);
+			ResourceLocation thinResourceLocation = texturePath.withPath(path -> "thin/" + path);
+			textureManager.register(thinResourceLocation, new DynamicTexture(thinResourceLocation::toString, nativeImage));
+			cir.setReturnValue(new ClientAsset.DownloadedTexture(thinResourceLocation, url));
 
 			NativeImage converted = new NativeImage(nativeImage.format(), nativeImage.getWidth(), nativeImage.getHeight(), true);
 			converted.copyFrom(nativeImage);
 			convertAlexToSteve(converted);
-			minecraft.getTextureManager().register(thiccResourceLocation, new DynamicTexture(thiccResourceLocation::toString, converted));
+			textureManager.register(thiccResourceLocation, new DynamicTexture(thiccResourceLocation::toString, converted));
 		}
 	}
 

@@ -20,7 +20,7 @@ public class BlackBarConcealer implements ModInitializer {
 	public void onInitialize() {
 		ConfigHolder<BBCConfig> configHolder = AutoConfig.register(BBCConfig.class, GsonConfigSerializer::new);
 
-		KeyMapping toggleKeyMapping = new KeyMapping("key.blackbarconcealer.toggle", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_B, KeyMapping.CATEGORY_MISC);
+		KeyMapping toggleKeyMapping = new KeyMapping("key.blackbarconcealer.toggle", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_B, KeyMapping.Category.MISC);
 		KeyBindingHelper.registerKeyBinding(toggleKeyMapping);
 
 		ClientTickEvents.END_CLIENT_TICK.register(e -> {

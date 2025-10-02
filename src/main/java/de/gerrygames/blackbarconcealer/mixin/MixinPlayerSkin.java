@@ -2,8 +2,10 @@ package de.gerrygames.blackbarconcealer.mixin;
 
 import de.gerrygames.blackbarconcealer.config.BBCConfig;
 import me.shedaniel.autoconfig.AutoConfig;
-import net.minecraft.client.resources.PlayerSkin;
+import net.minecraft.core.ClientAsset;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.PlayerModelType;
+import net.minecraft.world.entity.player.PlayerSkin;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -15,33 +17,38 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(PlayerSkin.class)
 public abstract class MixinPlayerSkin {
 
-	@Shadow @Final private ResourceLocation texture;
+	@Shadow @Final private ClientAsset.Texture body;
 
-	@Inject(method = "texture", at = @At("RETURN"), cancellable = true)
-	public void onGetTexture(CallbackInfoReturnable<ResourceLocation> cir) {
+	@Inject(method = "body", at = @At("RETURN"), cancellable = true)
+	public void onGetBodyTexture(CallbackInfoReturnable<ClientAsset.Texture> cir) {
+		if (!(body instanceof ClientAsset.DownloadedTexture downloadedTexture)) return;
+
 		BBCConfig config = AutoConfig.getConfigHolder(BBCConfig.class).get();
 		if (config.enabled() && config.fillPixels() && !hasThiccArms()) {
-			cir.setReturnValue(ResourceLocation.fromNamespaceAndPath(texture.getNamespace(), texture.getPath().replace("thin/", "thicc/")));
+			ResourceLocation texturePath = body.texturePath().withPath(path -> path.replace("thin/", "thicc/"));
+			cir.setReturnValue(new ClientAsset.DownloadedTexture(texturePath, downloadedTexture.url()));
 		}
 	}
 
 	@Inject(method = "model", at = @At("RETURN"), cancellable = true)
-	public void onGetModel(CallbackInfoReturnable<PlayerSkin.Model> cir) {
+	public void onGetModel(CallbackInfoReturnable<PlayerModelType> cir) {
+		if (!(body instanceof ClientAsset.DownloadedTexture)) return;
+
 		BBCConfig config = AutoConfig.getConfigHolder(BBCConfig.class).get();
 		if (!config.enabled()) return;
 
 		boolean preferWideModel = config.preferWideModel();
 		boolean fillPixels = config.fillPixels();
 
-		if (preferWideModel) cir.setReturnValue(PlayerSkin.Model.WIDE);
+		if (preferWideModel) cir.setReturnValue(PlayerModelType.WIDE);
 
-		if (cir.getReturnValue() == PlayerSkin.Model.WIDE && !fillPixels && !hasThiccArms()) {
-			cir.setReturnValue(PlayerSkin.Model.SLIM);
+		if (cir.getReturnValue() == PlayerModelType.WIDE && !fillPixels && !hasThiccArms()) {
+			cir.setReturnValue(PlayerModelType.SLIM);
 		}
 	}
 
 	@Unique
 	private boolean hasThiccArms() {
-		return texture.getPath().startsWith("thicc");
+		return body.texturePath().getPath().startsWith("thicc");
 	}
 }
