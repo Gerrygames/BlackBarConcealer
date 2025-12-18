@@ -3,7 +3,7 @@ package de.gerrygames.blackbarconcealer.mixin;
 import de.gerrygames.blackbarconcealer.config.BBCConfig;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraft.core.ClientAsset;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.PlayerModelType;
 import net.minecraft.world.entity.player.PlayerSkin;
 import org.spongepowered.asm.mixin.Final;
@@ -25,7 +25,7 @@ public abstract class MixinPlayerSkin {
 
 		BBCConfig config = AutoConfig.getConfigHolder(BBCConfig.class).get();
 		if (config.enabled() && config.fillPixels() && !hasThiccArms()) {
-			ResourceLocation texturePath = body.texturePath().withPath(path -> path.replace("thin/", "thicc/"));
+			Identifier texturePath = body.texturePath().withPath(path -> path.replace("thin/", "thicc/"));
 			cir.setReturnValue(new ClientAsset.DownloadedTexture(texturePath, downloadedTexture.url()));
 		}
 	}

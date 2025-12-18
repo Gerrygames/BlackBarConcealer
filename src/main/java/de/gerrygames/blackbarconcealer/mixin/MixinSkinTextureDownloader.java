@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.SkinTextureDownloader;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.core.ClientAsset;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -28,23 +28,23 @@ public abstract class MixinSkinTextureDownloader {
 
 	@Inject(method = "method_65864", at = @At("HEAD"), cancellable = true)
 	private void registerTextureInManager(ClientAsset.Texture texture, NativeImage nativeImage, CallbackInfoReturnable<ClientAsset.Texture> cir) {
-		ResourceLocation texturePath = texture.texturePath();
+		Identifier texturePath = texture.texturePath();
 		if (!texturePath.getPath().startsWith("skins")) return;
 
 		String url = ((ClientAsset.DownloadedTexture) texture).url();
-		ResourceLocation thiccResourceLocation = texturePath.withPath(path -> "thicc/" + path);
+		Identifier thiccIdentifier = texturePath.withPath(path -> "thicc/" + path);
 		if (hasThiccArms(nativeImage)) {
-			textureManager.register(thiccResourceLocation, new DynamicTexture(thiccResourceLocation::toString, nativeImage));
-			cir.setReturnValue(new ClientAsset.DownloadedTexture(thiccResourceLocation, url));
+			textureManager.register(thiccIdentifier, new DynamicTexture(thiccIdentifier::toString, nativeImage));
+			cir.setReturnValue(new ClientAsset.DownloadedTexture(thiccIdentifier, url));
 		} else {
-			ResourceLocation thinResourceLocation = texturePath.withPath(path -> "thin/" + path);
-			textureManager.register(thinResourceLocation, new DynamicTexture(thinResourceLocation::toString, nativeImage));
-			cir.setReturnValue(new ClientAsset.DownloadedTexture(thinResourceLocation, url));
+			Identifier thinIdentifier = texturePath.withPath(path -> "thin/" + path);
+			textureManager.register(thinIdentifier, new DynamicTexture(thinIdentifier::toString, nativeImage));
+			cir.setReturnValue(new ClientAsset.DownloadedTexture(thinIdentifier, url));
 
 			NativeImage converted = new NativeImage(nativeImage.format(), nativeImage.getWidth(), nativeImage.getHeight(), true);
 			converted.copyFrom(nativeImage);
 			convertAlexToSteve(converted);
-			textureManager.register(thiccResourceLocation, new DynamicTexture(thiccResourceLocation::toString, converted));
+			textureManager.register(thiccIdentifier, new DynamicTexture(thiccIdentifier::toString, converted));
 		}
 	}
 
