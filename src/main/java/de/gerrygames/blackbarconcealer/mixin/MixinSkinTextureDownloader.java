@@ -26,7 +26,7 @@ public abstract class MixinSkinTextureDownloader {
 
 	@Shadow @Final private TextureManager textureManager;
 
-	@Inject(method = "method_65864", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "lambda$registerTextureInManager$0", at = @At("HEAD"), cancellable = true)
 	private void registerTextureInManager(ClientAsset.Texture texture, NativeImage nativeImage, CallbackInfoReturnable<ClientAsset.Texture> cir) {
 		Identifier texturePath = texture.texturePath();
 		if (!texturePath.getPath().startsWith("skins")) return;
