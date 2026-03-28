@@ -1,0 +1,11 @@
+{
+  "text.autoconfig.blackbarconcealer.title": "Настройки Black Bar Concealer",
+  "text.autoconfig.blackbarconcealer.option.enabled": "Включено",
+  "text.autoconfig.blackbarconcealer.option.fillPixels": "Заполнять отсутствующие пиксели",
+  "text.autoconfig.blackbarconcealer.option.preferWideModel": "Использовать широкую модель скина",
+  "key.blackbarconcealer.toggle": "Переключение BBC",
+  "text.blackbarconcealer.toggled.on": "Black Bar Concealer включён!",
+  "text.blackbarconcealer.toggled.off": "Black Bar Concealer выключен!",
+
+  "modmenu.descriptionTranslation.blackbarconcealer": "Мод скрывает чёрные полосы на тонких скинах с широкой моделью."
+}
