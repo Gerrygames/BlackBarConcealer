@@ -27,7 +27,7 @@ public class BlackBarConcealer implements ModInitializer {
 			while (toggleKeyMapping.consumeClick()) {
 				configHolder.setConfig(configHolder.getConfig().toggle());
 				configHolder.save();
-				Minecraft.getInstance().gui.setOverlayMessage(configHolder.get().enabled() ?
+				Minecraft.getInstance().gui.hud.setOverlayMessage(configHolder.get().enabled() ?
 						Component.translatable("text.blackbarconcealer.toggled.on").withColor(CommonColors.GREEN) :
 						Component.translatable("text.blackbarconcealer.toggled.off").withColor(CommonColors.SOFT_RED),
 						false);
